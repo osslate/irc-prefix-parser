@@ -20,19 +20,26 @@ module.exports = function parsePrefix(prefix) {
     var userStart = 0
     var userEnd = 0
 
-    while (prefix[userStart] !== '!') userStart++
+    while (userStart < prefix.length && prefix[userStart] !== '!') {userStart++; console.log(userStart)}
 
     if (userStart < prefix.length) {
         result.nickname = prefix.slice(0, userStart)
         userEnd = userStart
     }
 
-    while (prefix[userEnd] !== '@') userEnd++
+    console.log(result.nickname)
 
-    if (userEnd < prefix.length) {
+    while (userEnd < prefix.length && prefix[userEnd] !== '@') {userEnd++;}
+
+    if (userEnd < prefix.length && result.nickname) {
         result.username = prefix.slice(userStart + 1, userEnd )
+        result.hostname = prefix.slice(userEnd + 1)
+    } else {
+        result.nickname = prefix.slice(0, userEnd)
         result.hostname = prefix.slice(userEnd + 1)
     }
 
     return result
 }
+
+var m = module.exports
