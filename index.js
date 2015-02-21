@@ -1,42 +1,41 @@
+// adapted from https://github.com/grawity/code/blob/master/lib/python/nullroute/irc.py#L24-L53
+
 module.exports = function parsePrefix(prefix) {
+    if (prefix.length === 0) {
+        return null
+    }
+
+    var dpos = prefix.indexOf('.') + 1
+    var upos = prefix.indexOf('!') + 1
+    var hpos = prefix.indexOf('@', upos) + 1
+
+    if (upos === 1 || hpos === 1) {
+        return null
+    }
+
     var result = {}
-    result.input = prefix
+    result.raw = prefix
+    result.isServer = false
+    result.nick = null
+    result.user = null
+    result.host = null
 
-    var hasExclamation = prefix.indexOf('!') !== -1
-    var hasAt = prefix.indexOf('@') !== -1
-    var hasPeriod = prefix.indexOf('.') !== -1
-
-    if (hasPeriod && !hasExclamation && !hasAt) {
-        result.type = 'server'
-        return result
-    }
-
-    result.type = 'user'
-
-    result.nickname = null
-    result.username = null
-    result.hostname = null
-
-    var userStart = 0
-    var userEnd = 0
-
-    while (userStart < prefix.length && prefix[userStart] !== '!') userStart++
-
-    if (userStart < prefix.length) {
-        result.nickname = prefix.slice(0, userStart)
-        userEnd = userStart
-    }
-
-    console.log(result.nickname)
-
-    while (userEnd < prefix.length && prefix[userEnd] !== '@') userEnd++
-
-    if (userEnd < prefix.length && result.nickname) {
-        result.username = prefix.slice(userStart + 1, userEnd )
-        result.hostname = prefix.slice(userEnd + 1)
+    if (upos > 0) {
+        result.nick = prefix.slice(0, upos - 1)
+        if (hpos > 0) {
+            result.user = prefix.slice(upos, hpos - 1)
+            result.host = prefix.slice(hpos)
+        } else {
+            result.user = prefix.slice(upos)
+        }
+    } else if (hpos > 0) {
+        result.nick = prefix.slice(0, hpos - 1)
+        result.host = prefix.slice(hpos)
+    } else if (dpos > 0) {
+        result.host = prefix
+        result.isServer = true
     } else {
-        result.nickname = prefix.slice(0, userEnd)
-        result.hostname = prefix.slice(userEnd + 1)
+        result.nick = prefix
     }
 
     return result

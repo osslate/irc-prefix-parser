@@ -7,25 +7,32 @@
 
 ## Usage
 
-The parser takes a string and 
+The parser takes a string and returns an object with:
+
+* `raw` - original prefix
+* `isServer` - boolean indicating whether or not the prefix is a server. If `false`, the prefix is a user.
+* `nick`, `user` and `host`
 
 ```js
 var parse = require('irc-prefix-parser')
 
 console.log(parse('foobar.freenode.net'))
 /* {
- *   input: 'foobar.freenode.net',
- *   type: 'server'
+ *   raw: 'foobar.freenode.net',
+ *   isServer: true,
+ *   nick: null
+ *   user: null
+ *   host: 'foobar.freenode.net'
  * }
  */
 
 console.log(parse('jamie!weechat@127.0.0.1'))
 /* {
  *   input: 'jamie!weechat@127.0.0.1',
- *   type: 'user',
- *   nickname: 'jamie',
- *   username: 'weechat',
- *   hostname: '127.0.0.1'
+ *   isServer: false,
+ *   nick: 'jamie',
+ *   user: 'weechat',
+ *   host: '127.0.0.1'
  * }
  */
 ```
