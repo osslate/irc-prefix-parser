@@ -28,7 +28,7 @@ console.log(parse('foobar.freenode.net'))
 
 console.log(parse('jamie!weechat@127.0.0.1'))
 /* {
- *   input: 'jamie!weechat@127.0.0.1',
+ *   raw: 'jamie!weechat@127.0.0.1',
  *   isServer: false,
  *   nick: 'jamie',
  *   user: 'weechat',
