@@ -1,7 +1,7 @@
 // adapted from https://github.com/grawity/code/blob/master/lib/python/nullroute/irc.py#L24-L53
 
 module.exports = function parsePrefix(prefix) {
-    if (prefix.length === 0) {
+    if (!prefix || prefix.length === 0) {
         return null
     }
 
